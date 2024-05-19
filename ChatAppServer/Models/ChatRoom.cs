@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+using ChatAppServer.Utility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,14 +19,17 @@ namespace ChatAppServer.Models
 
         private Client _host;
 
+        public int _roomKey;
+
         public ChatRoom(int maxClients,string roomName,Client host)
         {
             _maxClients = maxClients;
             _roomName = roomName;
             roomID = Guid.NewGuid();
             _host = host;
+			_roomKey = Encrypter.generateKey();
 			connectedClients = new List<Client>();
-			Console.WriteLine($"{DateTime.Now}: [{_host.userName}] has created Room: {roomName}");
+			Console.WriteLine($"{DateTime.Now}: [{_host.userName}] has created Room: {roomName} with key {_roomKey}");
         }
     }
 }

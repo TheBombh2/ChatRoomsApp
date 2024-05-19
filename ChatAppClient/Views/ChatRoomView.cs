@@ -1,5 +1,6 @@
 using ChatAppClient;
 using ChatAppClient.Models;
+using ChatAppClient.Utility;
 using System.Collections.ObjectModel;
 
 namespace ChatAppClient.Views
@@ -38,7 +39,8 @@ namespace ChatAppClient.Views
 
 		private void messageRecieved()
 		{
-			var message = _server.packetReader.readMessage();
+			var encryptedMessage = _server.packetReader.readMessage();
+			var message = Encrypter.decryptMessage(encryptedMessage,_room._roomKey);
 			Invoke(() =>
 			{
 				chatMsgsTB.AppendText(message);
@@ -88,7 +90,7 @@ namespace ChatAppClient.Views
 		{
 			if (!string.IsNullOrEmpty(messageTB.Text))
 			{
-				_server.sendMessageToServer(messageTB.Text, _room._roomID);
+				_server.sendMessageToServer(messageTB.Text, _room._roomID,_room._roomKey);
 				messageTB.Clear();
 			}
 		}

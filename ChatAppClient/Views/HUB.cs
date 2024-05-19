@@ -82,9 +82,10 @@ namespace ChatAppClient.Views
 		{
 			string roomName = _server.packetReader.readMessage();
 			string roomId = _server.packetReader.readMessage();
+			int roomKey = int.Parse(_server.packetReader.readMessage());
 			if (!_rooms.Any(x => x._roomID == roomId))
 			{
-				ChatRoom newChatRoom = new(roomName, roomId);
+				ChatRoom newChatRoom = new(roomName, roomId,roomKey);
 				_rooms.Add(newChatRoom);
 				Invoke(() =>
 				{

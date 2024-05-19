@@ -54,6 +54,7 @@ namespace ChatAppServer
 					broadCastPacket.writeOpCode(3);
 					broadCastPacket.writeMessage(room._roomName);
 					broadCastPacket.writeMessage(room.roomID.ToString());
+					broadCastPacket.writeMessage(room._roomKey.ToString());
 					user.clientSocket.Client.Send(broadCastPacket.getPacketBytes());
 				}
 			}
@@ -103,7 +104,7 @@ namespace ChatAppServer
 			}
 		}
 
-		public static void broadCastMessage(string roomID,string userName,string message)
+		public static void broadCastMessage(string roomID,string userName,string encryptedMessage)
 		{
 			var room = _rooms.Where(x => x.roomID.ToString() == roomID).FirstOrDefault();
             if (room == null)
@@ -111,8 +112,10 @@ namespace ChatAppServer
                 Console.WriteLine("error");
 				return;
             }
+			string message = Encrypter.decryptMessage(encryptedMessage, room._roomKey);
+			string hardCodedString = $"[{userName}]: ";
+			string finalMessage = $"{Encrypter.encryptMessage(hardCodedString, room._roomKey)}{encryptedMessage}";
 
-			string finalMessage = $"[{userName}]: {message}";
             foreach (var user in room.connectedClients)
 			{
 				var msgPacket = new PacketBuilder();
@@ -121,7 +124,7 @@ namespace ChatAppServer
 				user.clientSocket.Client.Send(msgPacket.getPacketBytes());
 				
 			}
-			Console.WriteLine($"{DateTime.Now}: [{userName}] sent: \"{message}\" To Room :{room._roomName}");
+			Console.WriteLine($"{DateTime.Now}: [{userName}] sent: \"{message}\" To Room :{room._roomName} Encrypted Message: {encryptedMessage}");
 		}
 		public static void broadCastDisconnect(string uid)
 		{

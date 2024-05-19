@@ -1,4 +1,5 @@
 ﻿using ChatAppClient.Models;
+using ChatAppClient.Utility;
 using ChatAppServer.Utility;
 using System;
 using System.Collections.Generic;
@@ -100,11 +101,12 @@ namespace ChatAppClient
 			messagePacket.writeMessage(userID);
 			_client.Client.Send(messagePacket.getPacketBytes());
 		}
-		public void sendMessageToServer(string message,string roomID)
+		public void sendMessageToServer(string message,string roomID,int roomKey)
 		{
 			var messagePacket = new PacketBuilder();
+			var encryptedMessage = Encrypter.encryptMessage(message, roomKey);
 			messagePacket.writeOpCode(5);
-			messagePacket.writeMessage(message);
+			messagePacket.writeMessage(encryptedMessage);
 			messagePacket.writeMessage(roomID);
 			_client.Client.Send(messagePacket.getPacketBytes());
 		}

@@ -10,11 +10,13 @@ namespace ChatAppClient.Models
 	{
 		public string _roomName { get; set; }
 		public string _roomID { get; set; }
+        public int _roomKey { get; set; }
 
-        public ChatRoom(string roomName,string roomId)
+        public ChatRoom(string roomName,string roomId,int roomKey)
         {
             _roomID = roomId;
             _roomName = roomName;
+            _roomKey = roomKey;
         }
     }
 }
