@@ -1,6 +1,6 @@
 # The project was made for CSC221 Operating Systems course.
 
-# Program in Action
+# Application Preview
 
 https://github.com/TheBombh2/ChatRoomsApp/assets/62998842/53b9be3b-60af-4dc2-8001-b5e97c5c3903
 
